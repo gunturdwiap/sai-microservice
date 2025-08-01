@@ -14,7 +14,7 @@ app.post('/events', (req, res) => {
     const event = req.body;
     console.log('Event received:', event);
 
-    // axios.post(`${process.env.TRANSACTION_SERVICE_BASE_URL}/api/events`, event);
+    axios.post(`${process.env.TRANSACTION_SERVICE_BASE_URL}/api/events`, event);
     axios.post(`${process.env.USER_SERVICE_BASE_URL}/api/events`, event);
     axios.post(`${process.env.PRODUCT_SERVICE_BASE_URL}/api/events`, event);
 

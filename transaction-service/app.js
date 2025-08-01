@@ -3,6 +3,7 @@ const sequelize = require('./config/db');
 const db = require('./models');
 // import file route disinihttps://docs.google.com/document/d/1wGRzQcfJzPpDQE1x_0lXlZ8bE3CJgBh-71iG_Jc4M6M/edit?tab=t.0
 const transactionRoutes = require('./routes/transaction.route');
+const eventRoutes = require('./routes/event.route');
 
 
 const app = express();
@@ -26,6 +27,7 @@ sequelize.authenticate()
   });
 
 app.use('/api/transactions', transactionRoutes);
+app.use('/api/events', eventRoutes);
 
 // Jalankan server
 app.listen(4000, () => {
