@@ -1,5 +1,6 @@
 const db = require('../models');
 const User = db.User;
+const axios = require('axios');
 
 exports.getAll = async (req, res) => {
   try {
@@ -22,9 +23,18 @@ exports.getById = async (req, res) => {
 
 exports.create = async (req, res) => {
   try {
+    const {id, name} = req.body;
+
     const user = await User.create(req.body);
+
+    await axios.post('http://localhost:4003/events', {
+      type: 'UserCreated',
+      data: {id,name}
+    });
+
     res.status(201).json(user);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: err.message });
   }
 };
@@ -52,3 +62,4 @@ exports.remove = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
