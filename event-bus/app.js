@@ -16,12 +16,14 @@ app.post('/events', (req, res) => {
 
     // axios.post(`${process.env.TRANSACTION_SERVICE_BASE_URL}/api/events`, event);
     axios.post(`${process.env.USER_SERVICE_BASE_URL}/api/events`, event);
-    // axios.post(`${process.env.PRODUCT_SERVICE_BASE_URL}/api/events`, event);
+    axios.post(`${process.env.PRODUCT_SERVICE_BASE_URL}/api/events`, event);
 
     res.send({ status: 'Event Submitted' });
 });
 
 app.listen(4003, () => {
+  console.log(process.env.TRANSACTION_SERVICE_BASE_URL)
   console.log(process.env.USER_SERVICE_BASE_URL)
+  console.log(process.env.PRODUCT_SERVICE_BASE_URL)
   console.log('Event Bus listening on port 4003');
 });
