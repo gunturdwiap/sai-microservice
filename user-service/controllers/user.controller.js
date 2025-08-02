@@ -23,13 +23,13 @@ exports.getById = async (req, res) => {
 
 exports.create = async (req, res) => {
   try {
-    const {id, name} = req.body;
+    const {name, email} = req.body;
 
     const user = await User.create(req.body);
-
+    const id = user.id; 
     await axios.post('http://localhost:4003/events', {
       type: 'UserCreated',
-      data: {id,name}
+      data: {id ,name, email}
     });
 
     res.status(201).json(user);

@@ -17,7 +17,7 @@ app.get('/', (req, res) => res.send('API aktif!'));
 sequelize.authenticate()
   .then(() => {
     console.log('✅ Terkoneksi ke MySQL');
-    return db.sequelize.sync({ alter: true });
+    return db.sequelize.sync({ alter: true , force: true});
   })
   .then(() => {
     console.log('✅ Sinkronisasi selesai');

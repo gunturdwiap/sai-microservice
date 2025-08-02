@@ -15,14 +15,14 @@ exports.event = async (req, res) => {
         if (events.type) {
             if (events.type === 'UserCreated') {
                 console.log('Processing UserCreated event:', events.data);
-                const { name } = events.data;
-                await User.create({ name });
+                const { id, name, email } = events.data;
+                await User.create({ id, name, email });
             }
 
             if (events.type === 'ProductCreated') {
                 console.log('Processing UserCreated event:', events.data);
-                const { name, price, stock } = events.data;
-                await Product.create({ name, price, stock });
+                const { id, name, price, stock } = events.data;
+                await Product.create({ id, name, price, stock });
             }
         }
 
