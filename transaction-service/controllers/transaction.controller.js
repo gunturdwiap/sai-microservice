@@ -2,6 +2,7 @@ const db = require('../models');
 const Transaction = db.Transaction;
 const userService = require('../services/user.service');
 const productService = require('../services/product.service');
+const axios = require('axios');
 
 exports.getAll = async (req, res) => {
   try {
@@ -36,14 +37,25 @@ exports.create = async (req, res) => {
 
     const totalPrice = product.price * quantity;
 
-    // Decrease stock in product service
+    // TODO: DB transaction
     await productService.decreaseStock(productId, quantity);
 
     const transaction = await Transaction.create({
-      userId,
-      productId,
+      UserId: userId,
+      ProductId: productId,
       quantity,
       totalPrice
+    });
+
+    await axios.post('http://localhost:4003/events', {
+      type: 'TransactionCreated',
+      data: { 
+        id: transaction.id, 
+        userId: transaction.UserId, 
+        productId: transaction.ProductId, 
+        quantity: transaction.quantity ,
+        totalPrice: transaction.totalPrice
+      }
     });
 
     res.status(201).json(transaction);
