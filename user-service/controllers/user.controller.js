@@ -41,10 +41,18 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
   try {
-    const [updated] = await User.update(req.body, {
-      where: { id: req.params.id }
+    const id = req.params.id;
+    const {name, email} = req.body;
+    
+    const user = await User.findByPk(id);
+    if (!user) return res.status(404).json({ error: 'User tidak ditemukan' });
+    await user.update({ name, email });
+
+    await axios.post('http://localhost:4003/events', {
+      type: 'UserUpdated',
+      data: {id ,name, email}
     });
-    if (updated === 0) return res.status(404).json({ error: 'User tidak ditemukan' });
+
     res.json({ message: 'User diperbarui' });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -53,10 +61,19 @@ exports.update = async (req, res) => {
 
 exports.remove = async (req, res) => {
   try {
-    const deleted = await User.destroy({
-      where: { id: req.params.id }
+    const id = req.params.id;
+
+    const user = await User.findByPk(id);
+    if (!user) return res.status(404).json({ error: 'User tidak ditemukan' });
+    await user.destroy({
+      where: { id }
     });
-    if (deleted === 0) return res.status(404).json({ error: 'User tidak ditemukan' });
+
+    await axios.post('http://localhost:4003/events', {
+      type: 'UserDeleted',
+      data: { id }
+    });
+
     res.json({ message: 'User dihapus' });
   } catch (err) {
     res.status(500).json({ error: err.message });
