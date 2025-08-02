@@ -37,6 +37,24 @@ exports.event = async (req, res) => {
             await Product.create({ id, name, price, stock });
         }
 
+        if (events.type === 'ProductUpdated') {
+            const { id, name, price, stock } = events.data;
+               
+            const product = await Product.findByPk(id);
+            if (!product) return res.status(404).json({ error: 'Product tidak ditemukan' });
+            await product.update({ name, price, stock });
+        }
+        
+        if (events.type === 'ProductDeleted') {
+            const { id } = events.data;
+
+            const product = await Product.findByPk(id);
+            if (!product) throw new Error('Product tidak ditemukan');
+            await product.destroy({
+                where: { id }
+            });
+        }
+
 
 
         res.status(200).json({ message: 'Event processed successfully' });
