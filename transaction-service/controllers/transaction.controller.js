@@ -36,6 +36,9 @@ exports.create = async (req, res) => {
 
     const totalPrice = product.price * quantity;
 
+    // Decrease stock in product service
+    await productService.decreaseStock(productId, quantity);
+
     const transaction = await Transaction.create({
       userId,
       productId,
